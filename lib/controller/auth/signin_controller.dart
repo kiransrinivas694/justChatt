@@ -1,3 +1,4 @@
+import 'package:chatapp_ksn/app/utils/app_utils.dart';
 import 'package:chatapp_ksn/routes/route_helper.dart';
 import 'package:chatapp_ksn/services/share_preference.dart';
 import 'package:chatapp_ksn/view/auth/signup/signup_screen.dart';
@@ -17,12 +18,18 @@ class SignInController extends GetxController {
         password: passwordController.text.trim(),
       );
       print("Login successful: $userCredential");
-      Get.offAllNamed(RouteHelper.getHomeRoute());
-      SharedPrefService.instance.setPrefStringValue(
+      print("Login successful user: ${userCredential.user}");
+      print("Login successful user: ${userCredential.user!.email}");
+
+      await SharedPrefService.instance.setPrefStringValue(
           SharedPrefService.instance.username,
           userCredential.additionalUserInfo!.username ?? "");
-      SharedPrefService.instance.setPrefStringValue(
+      await SharedPrefService.instance.setPrefStringValue(
           SharedPrefService.instance.email, userCredential.user!.email ?? "");
+
+      print(
+          "printing after assigning email -> ${await getSharedPreferenceValue(SharedPrefService.instance.email)}");
+      Get.offAllNamed(RouteHelper.getHomeRoute());
     } on FirebaseAuthException catch (e) {
       print("Login failed: $e");
     }

@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:web_socket_channel/html.dart';
+import 'package:web_socket_channel/html.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class HomeController extends GetxController {
@@ -20,6 +20,7 @@ class HomeController extends GetxController {
   Future<void> onInit() async {
     connectWebSocket();
     loadMessages();
+    getLoggedDetails();
     print("inti is called");
     super.onInit();
   }
@@ -88,7 +89,7 @@ class HomeController extends GetxController {
     //   return;
     // }
 
-    _channel = WebSocketChannel.connect(Uri.parse(
+    _channel = HtmlWebSocketChannel.connect(Uri.parse(
         'wss://demo.piesocket.com/v3/channel_123?api_key=JHN4ey9kkC5nZq5qIfZdyd1K3sa2mVwVZjKYMeN2'));
     print(
       "printing after socket connection",
@@ -150,8 +151,9 @@ class HomeController extends GetxController {
 
   Future<void> updateMessages() async {
     Box<MessageModel> messageBox = Hive.box<MessageModel>(AppStrings.messages);
-    messagesList.value = messageBox.values.toList().reversed.toList();
+    messagesList.value = messageBox.values.toList();
     print("update message called - ${messagesList.length}");
+    update();
   }
 
   void sendMessage() async {
@@ -167,7 +169,7 @@ class HomeController extends GetxController {
         'senderName': username,
         'senderMail': userEmail,
         'receiverName': "sandeep",
-        "receverId": "sandeep@gmail.com",
+        "receverId": "sandeep@gmail.co",
         'messageContent': messageController.text,
         'messageSendTime': DateTime.now().toIso8601String(),
       };
@@ -177,18 +179,18 @@ class HomeController extends GetxController {
 
       // _channel!.sink.add("${messageController.text}");
 
-      // Box<MessageModel> messageBox =
-      //     Hive.box<MessageModel>(AppStrings.messages);
-      // messageBox.add(
-      //   MessageModel(
-      //     "kiran",
-      //     "kiran@gmail.com",
-      //     "sandeep",
-      //     "sandeep@gmail.com",
-      //     messageController.text,
-      //     DateTime.now(),
-      //   ),
-      // );
+      Box<MessageModel> messageBox =
+          Hive.box<MessageModel>(AppStrings.messages);
+      messageBox.add(
+        MessageModel(
+          username,
+          userEmail,
+          "sandeep",
+          "sandeep@gmail.co",
+          messageController.text,
+          DateTime.now(),
+        ),
+      );
 
       updateMessages();
 
