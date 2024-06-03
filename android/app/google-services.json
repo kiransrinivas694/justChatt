@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "99716348754",
+    "project_id": "justchatt-72190",
+    "storage_bucket": "justchatt-72190.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:99716348754:android:4ee0ae5e7041afdddb988b",
+        "android_client_info": {
+          "package_name": "com.example.chatapp_ksn"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIwVj6b2jHqNsTvgSy0S0HFt8qqMMV7A4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:99716348754:android:ce89ea1b3060bebedb988b",
+        "android_client_info": {
+          "package_name": "com.kiran.justChatt"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIwVj6b2jHqNsTvgSy0S0HFt8qqMMV7A4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
