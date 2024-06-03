@@ -52,19 +52,12 @@ class HomeController extends GetxController {
 
     for (var i in usersQueryList) {
       usersList.add(userModelFromJson(jsonEncode(i)));
-      usersList.add(userModelFromJson(jsonEncode(i)));
-      usersList.add(userModelFromJson(jsonEncode(i)));
-      usersList.add(userModelFromJson(jsonEncode(i)));
-      usersList.add(userModelFromJson(jsonEncode(i)));
-      usersList.add(userModelFromJson(jsonEncode(i)));
-      usersList.add(userModelFromJson(jsonEncode(i)));
-      usersList.add(userModelFromJson(jsonEncode(i)));
-      usersList.add(userModelFromJson(jsonEncode(i)));
-      usersList.add(userModelFromJson(jsonEncode(i)));
     }
   }
 
   //Chat Area Messages
+  final selectedUserIndex = 0.obs;
+  final selectedUserEmail = "".obs;
   final TextEditingController messageController = TextEditingController();
   WebSocketChannel? _channel;
   final _isConnected = false.obs;

@@ -32,7 +32,7 @@ class HomeScreen extends StatelessWidget {
                         SharedPrefService.instance.clearPreferenceData();
                         Get.offAllNamed(RouteHelper.getSigninRoute());
                       },
-                      child: Icon(Icons.logout_rounded)),
+                      child: const Icon(Icons.logout_rounded)),
                 ),
               ],
             ),
@@ -54,13 +54,23 @@ class HomeScreen extends StatelessWidget {
                                 itemCount: controller.usersList.length,
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) {
-                                  return UserCard(
-                                    index: index,
-                                    email:
-                                        controller.usersList[index].email ?? "",
-                                    username:
-                                        controller.usersList[index].username ??
-                                            "",
+                                  return GestureDetector(
+                                    onTap: () {
+                                      controller.selectedUserEmail.value =
+                                          controller.usersList[index].email ??
+                                              "";
+                                      controller.selectedUserIndex.value =
+                                          index;
+                                    },
+                                    child: UserCard(
+                                      index: index,
+                                      email:
+                                          controller.usersList[index].email ??
+                                              "",
+                                      username: controller
+                                              .usersList[index].username ??
+                                          "",
+                                    ),
                                   );
                                 },
                                 separatorBuilder: (context, index) {
