@@ -93,20 +93,6 @@ class HomeController extends GetxController {
 
       Map<String, dynamic> messageResponse = jsonDecode(message);
 
-      // //  if ()
-      // print(
-      //     "printing listening messages after decode -> ${messageResponse["senderName"]}");
-      // print(
-      //     "printing listening messages after decode -> ${messageResponse["senderMail"]}");
-
-      // print(
-      //     "printing listening messages after decode -> ${messageResponse["receiverName"]}");
-      // print(
-      //     "printing listening messages after decode -> ${messageResponse["receverId"]}");
-      // print(
-      //     "printing listening messages after decode -> ${messageResponse["messageContent"]}");
-      // print(
-      //     "printing listening messages after decode -> ${messageResponse["messageSendTime"]}");
       Box<MessageModel> messageBox =
           Hive.box<MessageModel>(AppStrings.messages);
       messageBox.add(
@@ -120,33 +106,25 @@ class HomeController extends GetxController {
         ),
       );
 
-      // print(
-      //     "printing listening messages after decode -> ${messageResponse["messageSendTime"]}");
-
-      // messageBoxadd(
-      //   MessageModel(
-      //     "kiran",
-      //     "kiran@gmail.com",
-      //     "sandeep",
-      //     "sandeep@gmail.com",
-      //     messageResponse["messageContent"],
-      //     DateTime.now(),
-      //   ),
-      // );
-      updateMessages();
+      loadMessages();
     });
   }
 
   Future<void> loadMessages() async {
+    final String userEmail =
+        await getSharedPreferenceValue(SharedPrefService.instance.email);
     Box<MessageModel> messageBox = Hive.box<MessageModel>(AppStrings.messages);
-    messagesList.value = messageBox.values.toList(); //get all items in list
-  }
 
-  Future<void> updateMessages() async {
-    Box<MessageModel> messageBox = Hive.box<MessageModel>(AppStrings.messages);
-    messagesList.value = messageBox.values.toList();
-    print("update message called - ${messagesList.length}");
-    update();
+    List<MessageModel> msgList = [];
+
+    for (MessageModel message in messageBox.values) {
+      if (message.senderMail == usersList[selectedUserIndex.value].email &&
+          usersList[selectedUserIndex.value].email == userEmail) {
+        msgList.add(message);
+      }
+    }
+
+    messagesList.value = msgList.reversed.toList();
   }
 
   void sendMessage() async {
@@ -185,7 +163,7 @@ class HomeController extends GetxController {
         ),
       );
 
-      updateMessages();
+      loadMessages();
 
       // print("printing message boxvalue -> ${messageBox.values}");
 

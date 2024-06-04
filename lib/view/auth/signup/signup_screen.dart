@@ -103,7 +103,7 @@ class SignUpScreen extends StatelessWidget {
                                 ),
                                 Align(
                                   alignment: Alignment.center,
-                                  child: GestureDetector(
+                                  child: InkWell(
                                     onTap: () {
                                       Get.offAllNamed(
                                           RouteHelper.getSigninRoute());

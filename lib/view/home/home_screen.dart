@@ -27,7 +27,7 @@ class HomeScreen extends StatelessWidget {
               actions: [
                 Padding(
                   padding: const EdgeInsets.only(right: 20.0),
-                  child: GestureDetector(
+                  child: InkWell(
                       onTap: () {
                         SharedPrefService.instance.clearPreferenceData();
                         Get.offAllNamed(RouteHelper.getSigninRoute());
@@ -54,13 +54,14 @@ class HomeScreen extends StatelessWidget {
                                 itemCount: controller.usersList.length,
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) {
-                                  return GestureDetector(
+                                  return InkWell(
                                     onTap: () {
                                       controller.selectedUserEmail.value =
                                           controller.usersList[index].email ??
                                               "";
                                       controller.selectedUserIndex.value =
                                           index;
+                                      controller.loadMessages();
                                     },
                                     child: UserCard(
                                       index: index,

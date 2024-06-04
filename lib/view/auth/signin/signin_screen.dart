@@ -64,7 +64,7 @@ class SignInScreen extends StatelessWidget {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                GestureDetector(
+                                InkWell(
                                   onTap: () {
                                     controller.verifySignIn();
                                   },
@@ -86,7 +86,7 @@ class SignInScreen extends StatelessWidget {
                                 ),
                                 Align(
                                   alignment: Alignment.center,
-                                  child: GestureDetector(
+                                  child: InkWell(
                                     onTap: () {
                                       Get.offAllNamed(
                                           RouteHelper.getSignupRoute());

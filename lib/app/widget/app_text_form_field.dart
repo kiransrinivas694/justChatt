@@ -111,7 +111,7 @@ class AppTextFormField extends StatelessWidget {
               ),
               if (suffixIcon != null) ...[
                 SizedBox(width: 12.px),
-                GestureDetector(
+                InkWell(
                     onTap: onSuffixTap,
                     child: suffixIcon ?? Icon(Icons.search)),
                 SizedBox(width: 12.px),
