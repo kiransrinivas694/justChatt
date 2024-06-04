@@ -3,7 +3,9 @@ import 'package:chatapp_ksn/constant/app_colors.dart';
 import 'package:chatapp_ksn/controller/home/home_controller.dart';
 import 'package:chatapp_ksn/routes/route_helper.dart';
 import 'package:chatapp_ksn/services/share_preference.dart';
+import 'package:chatapp_ksn/utils/responsive.dart';
 import 'package:chatapp_ksn/view/home/chat_area.dart';
+import 'package:chatapp_ksn/view/home/chat_screen.dart';
 import 'package:chatapp_ksn/view/home/widget/user_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,11 +16,14 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isExtraSmallDevice = Responsive.isExtraSmall(context);
+    bool isSmallDevice = Responsive.isSmall(context);
+
     return GetBuilder<HomeController>(
         init: HomeController(),
         initState: (state) {
           HomeController controller = Get.put(HomeController());
-          controller.fetchUsers();
+
           controller.connectWebSocket();
         },
         builder: (controller) {
@@ -43,7 +48,7 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   Container(
                     height: double.infinity,
-                    width: 30.w,
+                    width: isExtraSmallDevice || isSmallDevice ? 100.w : 30.w,
                     padding: const EdgeInsets.only(top: 10),
                     color: AppColorConstant.appWhite,
                     child: Column(
@@ -61,7 +66,13 @@ class HomeScreen extends StatelessWidget {
                                               "";
                                       controller.selectedUserIndex.value =
                                           index;
+                                      print("printng in ontap");
                                       controller.loadMessages();
+
+                                      if (isExtraSmallDevice || isSmallDevice) {
+                                        Get.toNamed(
+                                            "${RouteHelper.getChatRoute()}/${controller.usersList[controller.selectedUserIndex.value].username}");
+                                      }
                                     },
                                     child: UserCard(
                                       index: index,
@@ -84,14 +95,15 @@ class HomeScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Expanded(
-                    child: Container(
-                      height: double.infinity,
-                      // width: 60.w,
-                      color: Colors.grey[100],
-                      child: ChatArea(),
-                    ),
-                  )
+                  if (!isExtraSmallDevice && !isSmallDevice)
+                    Expanded(
+                      child: Container(
+                        height: double.infinity,
+                        // width: 60.w,
+                        color: Colors.grey[100],
+                        child: ChatArea(),
+                      ),
+                    )
                 ],
               ),
             ),

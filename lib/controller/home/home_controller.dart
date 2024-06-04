@@ -19,6 +19,7 @@ class HomeController extends GetxController {
   @override
   Future<void> onInit() async {
     connectWebSocket();
+    await fetchUsers();
     loadMessages();
     getLoggedDetails();
     print("inti is called");
@@ -41,7 +42,7 @@ class HomeController extends GetxController {
   List<UserModel> usersList = <UserModel>[].obs;
   final userListLoad = false.obs;
 
-  void fetchUsers() async {
+  Future<void> fetchUsers() async {
     QuerySnapshot querySnapshot = await _firestore.collection('users').get();
 
     print(
@@ -50,8 +51,13 @@ class HomeController extends GetxController {
         .map((doc) => doc.data() as Map<String, dynamic>)
         .toList();
 
+    final String userEmail =
+        await getSharedPreferenceValue(SharedPrefService.instance.email);
+
     for (var i in usersQueryList) {
-      usersList.add(userModelFromJson(jsonEncode(i)));
+      if (userEmail != i["email"]) {
+        usersList.add(userModelFromJson(jsonEncode(i)));
+      }
     }
   }
 
@@ -117,14 +123,36 @@ class HomeController extends GetxController {
 
     List<MessageModel> msgList = [];
 
+    print("printng values loaded -> ${messageBox.values}");
+
+    int listLength = messageBox.values.toList().length;
+
+    print("printng values length -> $listLength");
+
     for (MessageModel message in messageBox.values) {
-      if (message.senderMail == usersList[selectedUserIndex.value].email &&
-          usersList[selectedUserIndex.value].email == userEmail) {
+      print("printng values loaded in loop -> ${messageBox.values}");
+      print("printng values loaded in senderMail -> ${message.senderMail}");
+      print(
+          "printng values loaded in userList selectedMaiil -> ${usersList[selectedUserIndex.value].email}");
+      print(
+          "printng values loaded in receiver mail -> ${message.recceiverMail}");
+      // print("printng values loaded in loop -> ${messageBox.values}");
+      // if ((message.senderMail == usersList[selectedUserIndex.value].email &&
+      //     usersList[selectedUserIndex.value].email == userEmail) || ()) {
+      //   msgList.add(message);
+      // }
+      if (message.senderMail == usersList[selectedUserIndex.value].email ||
+          message.recceiverMail == usersList[selectedUserIndex.value].email) {
         msgList.add(message);
       }
     }
 
+    print("printng values loaded  1-> ${messageBox.values}");
+
     messagesList.value = msgList.reversed.toList();
+
+    print("printng values loaded 2 -> ${messageBox.values}");
+    update();
   }
 
   void sendMessage() async {
@@ -139,8 +167,8 @@ class HomeController extends GetxController {
       final messageBody = {
         'senderName': username,
         'senderMail': userEmail,
-        'receiverName': "sandeep",
-        "receverId": "sandeep@gmail.co",
+        'receiverName': usersList[selectedUserIndex.value].username,
+        "receverId": usersList[selectedUserIndex.value].email,
         'messageContent': messageController.text,
         'messageSendTime': DateTime.now().toIso8601String(),
       };
@@ -156,8 +184,8 @@ class HomeController extends GetxController {
         MessageModel(
           username,
           userEmail,
-          "sandeep",
-          "sandeep@gmail.co",
+          usersList[selectedUserIndex.value].username ?? "",
+          usersList[selectedUserIndex.value].email ?? "",
           messageController.text,
           DateTime.now(),
         ),
